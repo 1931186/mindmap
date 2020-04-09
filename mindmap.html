@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<style>
+		html, body {margin: 0; height: 100%; overflow: hidden}
+		
+		.red {border-color:#e6261f; color:#e6261f; stroke:#e6261f}
+		.red:hover {border-color:#e6261f; background-color:#e6261f}
+		.red:active {border-color:#e6261f!important; background-color:#e6261f!important; box-shadow: 0 0 0 .2rem rgba(230,38,31,.5)!important}
+		.red:focus {box-shadow: 0 0 0 .2rem rgba(230,38,31,.5); border-color:#e6261f}
+		
+		.orange {border-color:#eb7532; color:#eb7532; stroke:#eb7532}
+		.orange:hover {border-color:#eb7532; background-color:#eb7532}
+		.orange:active {border-color:#eb7532!important; background-color:#eb7532!important; box-shadow: 0 0 0 .2rem rgba(235,117,50,.5)!important}
+		.orange:focus {box-shadow: 0 0 0 .2rem rgba(235,117,50,.5); border-color:#eb7532}
+
+		.yellow {border-color:#f7d038; color:#f7d038; stroke:#f7d038}
+		.yellow:hover {border-color:#f7d038; background-color:#f7d038}
+		.yellow:active {border-color:#f7d038!important; background-color:#f7d038!important; box-shadow: 0 0 0 .2rem rgba(247,208,56,.5)!important}
+		.yellow:focus {box-shadow: 0 0 0 .2rem rgba(247,208,56,.5); border-color:#f7d038}
+		
+		.green {border-color:#a3e048; color:#a3e048; stroke:#a3e048}
+		.green:hover {border-color:#a3e048; background-color:#a3e048}
+		.green:active {border-color:#a3e048!important; background-color:#a3e048!important; box-shadow: 0 0 0 .2rem rgba(163,224,72,.5)!important}
+		.green:focus {box-shadow: 0 0 0 .2rem rgba(163,224,72,.5); border-color:#a3e048}
+
+		.aquamarine {border-color:#49da9a; color:#49da9a; stroke:#49da9a}
+		.aquamarine:hover {border-color:#49da9a; background-color:#49da9a}
+		.aquamarine:active {border-color:#49da9a!important; background-color:#49da9a!important; box-shadow: 0 0 0 .2rem rgba(73,218,154,.5)!important}
+		.aquamarine:focus {box-shadow: 0 0 0 .2rem rgba(73,218,154,.5); border-color:#49da9a}
+
+		.cyan {border-color:#34bbe6; color:#34bbe6; stroke:#34bbe6}
+		.cyan:hover {border-color:#34bbe6; background-color:#34bbe6}
+		.cyan:active {border-color:#34bbe6!important; background-color:#34bbe6!important; box-shadow: 0 0 0 .2rem rgba(52,187,230,.5)!important}
+		.cyan:focus {box-shadow: 0 0 0 .2rem rgba(52,187,230,.5); border-color:#34bbe6}
+
+		.blue {border-color:#4355db; color:#4355db; stroke:#4355db}
+		.blue:hover {border-color:#4355db; background-color:#4355db}
+		.blue:active {border-color:#4355db!important; background-color:#4355db!important; box-shadow: 0 0 0 .2rem rgba(67,85,219,.5)!important}
+		.blue:focus {box-shadow: 0 0 0 .2rem rgba(67,85,219,.5); border-color:#4355db}
+
+		.purple {border-color:#d23be7; color:#d23be7; stroke:#d23be7}
+		.purple:hover {border-color:#d23be7; background-color:#d23be7}
+		.purple:active {border-color:#d23be7!important; background-color:#d23be7!important; box-shadow: 0 0 0 .2rem rgba(210,59,231,.5)!important}
+		.purple:focus {box-shadow: 0 0 0 .2rem rgba(210,59,231,.5); border-color:#d23be7}
+		
+		.center {
+			margin: 0;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			-ms-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
+		}
+		
+		.btn {
+			position: absolute;
+			z-index: 1;
+			background-color: white;
+			font-size: 1rem;
+			padding-bottom: 3px;
+			padding-top: 3px;
+			padding-left: 8px;
+			padding-right: 8px;
+		}
+		.connector {
+			stroke-width: 1;
+			fill: none;
+			z-index: -1;
+			position: absolute;
+		}
+		
+		.circle {
+			border-radius: 50%;
+			width: 30px;
+			height: 30px;
+		}
+		
+		.context-menu{
+			position: absolute;
+			top: -60px;
+			display: none;
+			z-index: 3;
+		}
+		
+		.context {
+			opacity: 0.0;
+		}
+		
+		.context-delete {
+			position: absolute;
+			top: 20px;
+			left: -30px;
+		}
+		
+		.context-new {
+			position: absolute;
+		}
+		
+		.context-edit {
+			position: absolute;
+			top: 20px;
+			left: 30px;
+		}
+		
+	</style>
+    <title>MindMap!</title>
+  </head>
+  <body>
+	<div>
+		<div class="center">
+			<div id="root" class="node" style="position:absolute">
+			
+				<button type="button" class="btn btn-outline-primary btn-node yellow"><br>Hellffffffffffffffffffffffffffffffffffffffffffo,<br></br></button>
+				<div class="context-menu" >
+					<button type="button" class="btn btn-outline-primary context circle context-delete"></button>
+					<button type="button" class="btn btn-outline-primary context circle context-new"></button>
+					<button type="button" class="btn btn-outline-primary context circle context-edit"></button>
+				</div>
+				
+				<div class="node" style="position: absolute; top: 100px; left: 50px">
+					<svg class="connector"><path d=""/></svg>
+					<button type="button" class="btn btn-outline-primary btn-node red">I</button>
+					<div class="context-menu" >
+						<button type="button" class="btn btn-outline-primary context circle context-delete"></button>
+						<button type="button" class="btn btn-outline-primary context circle context-new"></button>
+						<button type="button" class="btn btn-outline-primary context circle context-edit"></button>
+					</div>
+				</div>
+				
+				<div class="node" style="position:absolute; top: -100px; left: -300px">
+				
+					<svg class="connector"><path d=""/></svg>
+					<button id="drag" type="button" class="btn btn-outline-primary btn-node cyan">am</button>
+					<div class="context-menu" >
+						<button type="button" class="btn btn-outline-primary context circle context-delete"></button>
+						<button type="button" class="btn btn-outline-primary context circle context-new"></button>
+						<button type="button" class="btn btn-outline-primary context circle context-edit"></button>
+					</div>
+					
+					<div class="node" style="position:absolute; top: 50px; left: -50px">
+						<svg class="connector"><path d=""/></svg>
+						<button id="drag" type="button" class="btn btn-outline-primary btn-node purple">a</button>
+						<div class="context-menu" >
+							<button type="button" class="btn btn-outline-primary context circle context-delete"></button>
+							<button type="button" class="btn btn-outline-primary context circle context-new"></button>
+							<button type="button" class="btn btn-outline-primary context circle context-edit"></button>
+						</div>
+					</div>
+					<div class="node" style="position:absolute; top: 100px; left: -50px">
+						<svg class="connector"><path d=""/></svg>
+						<button id="drag" type="button" class="btn btn-outline-primary btn-node orange">mindmap!</button>
+						<div class="context-menu" >
+							<button type="button" class="btn btn-outline-primary context circle context-delete"></button>
+							<button type="button" class="btn btn-outline-primary context circle context-new"></button>
+							<button type="button" class="btn btn-outline-primary context circle context-edit"></button>
+						</div>
+					</div>
+					
+				</div>
+				
+			</div>
+		</div>
+		
+	</div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script>
+		//listeners
+		window.addEventListener('wheel', function(event) {
+				zoom(event.deltaY);
+		});
+		
+		//init
+		var childs = document.getElementById('root').getElementsByClassName('node');
+		for (var i = 0; i < childs.length; i++) {
+			l = $(childs[i]).siblings(".btn").attr("class").split(/\s+/); //parent button
+			childs[i].getElementsByTagName("svg")[0].lastChild.setAttribute("class", l[l.length-1]);
+		}
+		var childs = document.getElementById('root').getElementsByClassName('context-menu');
+		for (var i = 0; i < childs.length; i++) {
+			l = $(childs[i]).siblings(".btn").attr("class").split(/\s+/); //parent button
+			$(childs[i]).children().each( function () {
+				$(this).addClass(l[l.length-1]);
+			});
+		}
+		updateSVG();
+
+		
+		function animate(cont_men, show) {
+			let btns = cont_men.children();
+			if(show) {
+				for(var i = 0; i<btns.length; i++) {
+					$(btns[i]).delay(i*100).animate( { opacity: 1 } );
+				}
+			} else {
+				for(var i = 0; i<btns.length; i++) {
+					$(btns[i]).delay(i*100).animate( { opacity: 0 }, function() {cont_men.hide()} );
+				}
+			}
+		}
+		
+		function drawContextMenu(btn) {
+			l = $(btn).outerWidth();
+			let cont_men = $(btn).siblings(".context-menu");
+			cont_men[0].style.left = l/2-15 + "px";
+			cont_men[0].style.top = -60 + "px";
+			if(cont_men.css('display') == 'none') {
+				cont_men.show();
+				animate(cont_men, true);
+			}
+			
+		}
+		
+		$(".btn-node").blur( function() {
+				this.style.zIndex = "1";
+				let btns = $(this).siblings(".context-menu").children();
+				animate($(this).siblings(".context-menu"), false);
+			});
+		
+		function updateSVG() {
+			var childs = document.getElementById('root').getElementsByClassName('btn-node');
+			for (var i = 0; i < childs.length; i++) {
+				drawSVG(childs[i]);
+			}
+		}
+		
+		$(".btn-node").click( function() {
+			if($(document.activeElement)[0] == this) { //AND if contextmenu is hidden
+				drawContextMenu(this);
+			}
+		});
+		
+		//dragables
+		var mousemove, mousedown = false;
+		var focused;
+		$(".btn-node").hover( function() {
+				//console.log("on");
+				if((!mousemove && !mousedown) || focused) {
+					focused = $(document.activeElement)[0] == this;
+				}
+				this.onmousedown = function (e) {
+					e.preventDefault();
+					mousedown = true;
+					console.log("mouse down");
+					this.style.zIndex = "2";
+					pos3 = e.clientX;
+					pos4 = e.clientY;
+					var f = this;
+					mousemove = false
+					//maybe move all focused elements
+					document.onmouseup = function() {
+						mousedown = false;
+						document.onmouseup = null;
+						document.onmousemove = null;
+						if(!(mousemove && !focused)) {
+							f.focus();
+							focused = true;
+						}
+					}
+					document.onmousemove = function (e) {
+						mousemove = true;
+						pos1 = pos3 - e.clientX;
+						pos2 = pos4 - e.clientY;
+						pos3 = e.clientX;
+						pos4 = e.clientY;
+						f.parentNode.style.top = (f.parentNode.offsetTop - pos2) + "px";
+						f.parentNode.style.left = (f.parentNode.offsetLeft - pos1) + "px";
+						drawSVG(f);
+					};
+				};
+			});
+		
+		var zooom = 1;
+		
+		//todo: pan to cursor?
+		function zoom(lvl) {
+			let zoom_max = 2;
+			let zoom_min = 0.2;
+			if((zooom > zoom_min && zooom < zoom_max) || (zooom <= zoom_min && event.deltaY < 0) || (zooom >= zoom_max && event.deltaY > 0)){
+				if(event.deltaY > 0) {
+					zooom = zooom*0.5;
+				} else {
+					zooom = zooom*2;
+				}
+				//reduce font-size, padding and stroke-width of svg
+				if(document.activeElement.classList.contains("btn-node")) {
+					let f = document.activeElement;
+					var to = [0, 0];
+					while(f.parentNode.id != "root") {
+						f = f.parentNode;
+						to[0] = to[0] + $(f).position().left;
+						to[1] = to[1] + $(f).position().top;
+					}
+				} else {
+					console.log($(document.getElementById("root")).position().left + " " + document.documentElement.scrollWidth/2);
+					var to = [$(document.getElementById("root")).position().left * -1, $(document.getElementById("root")).position().top * -1];
+				}
+				let btns = c = document.getElementById('root').getElementsByClassName('btn-node');
+				for (let i = 0; i < btns.length; i++) {
+					btns[i].style.fontSize = btns[i].style.fontSize = zooom + "rem";
+					btns[i].style.paddingTop = btns[i].style.paddingBottom = zooom*3 + "px"
+					btns[i].style.paddingLeft = btns[i].style.paddingRight = zooom*8 + "px";
+				}
+				var c = document.getElementById('root').getElementsByClassName('node');
+				for (var i = 0; i < c.length; i++) {
+					c[i].style.top = $(c[i]).position().top* ((event.deltaY > 0) ? 0.5 : 2) + "px";
+					c[i].style.left = $(c[i]).position().left* ((event.deltaY > 0) ? 0.5 : 2) + "px";
+				}
+				if(document.activeElement.classList.contains("btn-node")) {
+					drawContextMenu(document.activeElement);
+				}
+				console.log(to);
+				document.getElementById("root").style.left = $(document.getElementById("root")).position().left + (to[0] * ((event.deltaY > 0) ? 0.5 : -1)) + "px";
+				document.getElementById("root").style.top = $(document.getElementById("root")).position().top + (to[1] * ((event.deltaY > 0) ? 0.5 : -1)) + "px";
+
+				updateSVG();
+			}
+		}
+		
+		
+		//-> specifications:
+		// parent Knoten von root button muss id "root" besitzen
+		// in einer node div darf es nur einen button mit der klasse "btn" geben
+		// das letzte Kind von svg muss der pfad sein
+		function drawSVG(button) {
+			if(button.parentNode.id != "root") {
+				var scale = 0.3;
+				var svg = button.previousSibling.previousSibling;
+				var div_pos = $(button.parentNode).position();
+				var parent_btn = $(button.parentNode).siblings(".btn");
+				var parent_btn_height = parent_btn.outerHeight();
+				var parent_btn_width = parent_btn.outerWidth();
+				var button_width = $(button).outerWidth();
+				var button_height = $(button).outerHeight();
+				svg.style.left = svg.style.right = svg.style.top = svg.style.bottom = "0px";
+				var parent_btn_ratio = parent_btn_width/parent_btn_height;
+				if(div_pos.top + button_height/2 >= parent_btn_height/2) {
+					//draw lower part
+					if(div_pos.left + button_width/2 >= parent_btn_width/2) {
+						//set svg position
+						svg.style.top = 0 - div_pos.top + "px";
+						svg.style.left = 0 - div_pos.left + "px";
+						//set svg dimension
+						svg.setAttribute("width", div_pos.left + button_width + "px");
+						svg.setAttribute("height", div_pos.top + button_height + "px");
+						//draw svg
+						if(parent_btn_ratio > div_pos.left/div_pos.top && div_pos.top >= 0) {
+							//on the bottom of parent node
+							a = parent_btn_width/2;
+							b = parent_btn_height;
+							c = (div_pos.left + button_width/2);
+							d = div_pos.top;
+							//svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a) + " " + (d*scale+b) + ", " + (c) + " " + (d-d*scale) + ", " + c + " " + d);
+							svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a) + " " + (b+(d-b)/2) + ", " + (c) + " " + (b+(d-b)/2) + ", " + c + " " + d);
+						} else {
+							//on the right side of parent node
+							a = parent_btn_width;
+							b = parent_btn_height/2;
+							c = div_pos.left;
+							d = div_pos.top + button_height/2;
+							//svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a+c*scale) + " " + (b) + ", " + (c-c*scale) + " " + (d) + ", " + c + " " + d);
+							svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a+(c-a)/2) + " " + (b) + ", " + (a+(c-a)/2) + " " + (d) + ", " + c + " " + d);
+						}
+					} else {
+						//set svg position
+						svg.style.top = 0 - div_pos.top + "px";
+						svg.style.right = 0 + div_pos.left + "px";
+						//set svg dimension
+						svg.setAttribute("width", div_pos.left*-1 + button_width + parent_btn_width + "px");
+						svg.setAttribute("height", div_pos.top + button_height + "px");
+						//draw svg
+						
+						if(parent_btn_ratio*-1 <= (div_pos.left + button_width - parent_btn_width)/(div_pos.top) && div_pos.top >= 0) {
+							//on the bottom of parent node
+							a = button_width/2;
+							b = div_pos.top;
+							c = (div_pos.left*-1 + parent_btn_width/2);
+							d = parent_btn_height;
+							//svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a) + " " + (b-b*scale) + ", " + (c) + " " + (d+b*scale) + ", " + c + " " + d);
+							svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a) + " " + (d+(b-d)/2) + ", " + (c) + " " + (d+(b-d)/2) + ", " + c + " " + d);
+
+						} else {
+							//on the left side of parent node
+							a = button_width;
+							b = (div_pos.top + button_height/2);
+							c = (div_pos.left*-1);
+							d = parent_btn_height/2;
+							//svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a+c*scale) + " " + (b) + ", " + (c-c*scale) + " " + (d) + ", " + c + " " + d);
+							svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a+(c-a)/2) + " " + (b) + ", " + (a+(c-a)/2) + " " + (d) + ", " + c + " " + d);
+
+						}
+					}
+				} else {
+					//draw upper part
+					if(div_pos.left + button_width/2 >= parent_btn_width/2) {
+						//set svg position
+						svg.style.bottom = 0 + div_pos.top + "px";
+						svg.style.left = 0 - div_pos.left + "px";
+						//set svg dimension
+						svg.setAttribute("width", div_pos.left + button_width + "px");
+						svg.setAttribute("height", div_pos.top*-1 + button_height + parent_btn_height + "px");
+						//draw svg
+						console.log(div_pos.left + " " + (div_pos.top+parent_btn_height));
+						if(parent_btn_ratio*-1 <= div_pos.left/(div_pos.top+button_height-parent_btn_height) && div_pos.top+button_height <= 0) {
+							//on the top of parent node
+							a = parent_btn_width/2;
+							b = (div_pos.top*-1);
+							c = (div_pos.left + button_width/2);
+							d = button_height;
+							//svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a) + " " + (b-b*scale) + ", " + (c) + " " + (d+b*scale) + ", " + c + " " + d);
+							svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a) + " " + (d+(b-d)/2) + ", " + (c) + " " + (d+(b-d)/2) + ", " + c + " " + d);
+
+						} else {
+							//on the right side of parent node
+							a = parent_btn_width;
+							b = ((div_pos.top*-1) + parent_btn_height/2);
+							c = (div_pos.left);
+							d = button_height/2;
+							//svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a+c*scale) + " " + (b) + ", " + (c-c*scale) + " " + (d) + ", " + c + " " + d);
+							svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a+(c-a)/2) + " " + (b) + ", " + (a+(c-a)/2) + " " + (d) + ", " + c + " " + d);
+						}
+					} else {
+						//set svg position
+						svg.style.bottom = 0 + div_pos.top + "px";
+						svg.style.right = 0 + div_pos.left + "px";
+						//set svg dimension
+						svg.setAttribute("width", div_pos.left*-1 + button_width + parent_btn_width + "px");
+						svg.setAttribute("height", div_pos.top*-1 + button_height + parent_btn_height + "px");
+						//draw svg
+						if(parent_btn_ratio >= (div_pos.left+button_width-parent_btn_width)/(div_pos.top+button_height-parent_btn_height) && div_pos.top+button_height <= 0) {
+							//on the top of parent node
+							a = button_width/2;
+							b = button_height;
+							c = ((div_pos.left*-1) + parent_btn_width/2);
+							d = (div_pos.top*-1);
+							//svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a) + " " + (d*scale+b) + ", " + (c) + " " + (d-d*scale) + ", " + c + " " + d);
+							svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a) + " " + (b+(d-b)/2) + ", " + (c) + " " + (b+(d-b)/2) + ", " + c + " " + d);
+
+						} else {
+							//on the left side of parent node
+							a = button_width;
+							b = button_height/2;
+							c = (div_pos.left*-1);
+							d = ((div_pos.top*-1) + parent_btn_height/2);
+							//svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a+c*scale) + " " + (b) + ", " + (c-c*scale) + " " + (d) + ", " + c + " " + d);
+							svg.lastChild.setAttribute("d", "M" + a + " " + b + " C" + (a+(c-a)/2) + " " + (b) + ", " + (a+(c-a)/2) + " " + (d) + ", " + c + " " + d);
+						}
+					}
+				}
+			}
+		}
+	</script>
+  </body>
+</html>
