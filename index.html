@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<style>
+		html, body {margin: 0; height: 100%; overflow: hidden}
+		
+		.btn {
+			border: 1px solid transparent;
+			border-radius: 0.25rem;
+			position: absolute;
+			z-index: 1;
+			background-color: white;
+			font-size: 1rem;
+			padding-bottom: 3px;
+			padding-top: 3px;
+			padding-left: 8px;
+			padding-right: 8px;
+		}
+		
+		.btn:hover {
+			##color: #ffffff;
+		}
+		
+		.btn:active {
+		}
+		
+		.btn:focus {
+		}
+		
+		svg {
+			stroke-width: 1;
+			fill: none;
+			z-index: -1;
+			position: absolute;
+		}
+		
+		.btn-node {
+			white-space: pre;
+			border-width: 1px;
+			transition:transform 0.4s cubic-bezier(0.54,1.5,0.38,1.2); /*drag pop*/
+			cursor: default;
+		}
+		
+		.red {border-color:#e6261f; color:#e6261f; stroke:#e6261f}
+		.btn.red:hover:not(:focus) {border-color:#e6261f; box-shadow: 0 0 10px .2rem rgba(230, 38, 31,.5)}
+		.btn.red:active, .btn.red:focus, .context.red.active {border-color:#e6261f ; box-shadow: 0 0 0 .2rem rgba(230, 38, 31,.5) }
+		.kreis.red, .dot.red, .sector.red, .filled.red, .context.red:before { background-color: #e6261f }
+		.collapse_arrow_left.red, .collapse_arrow_right.red { background-color: #ed9190 }
+		.blue {border-color:#4355db; color:#4355db; stroke:#4355db}
+		.btn.blue:hover:not(:focus) {border-color:#4355db; box-shadow: 0 0 10px .2rem rgba(67, 85, 219,.5)}
+		.btn.blue:active, .btn.blue:focus, .context.blue.active {border-color:#4355db ; box-shadow: 0 0 0 .2rem rgba(67, 85, 219,.5) }
+		.kreis.blue, .dot.blue, .sector.blue, .filled.blue, .context.blue:before { background-color: #4355db }
+		.collapse_arrow_left.blue, .collapse_arrow_right.blue { background-color: #969be5 }
+		.orange {border-color:#eb7532; color:#eb7532; stroke:#eb7532}
+		.btn.orange:hover:not(:focus) {border-color:#eb7532; box-shadow: 0 0 10px .2rem rgba(235, 117, 50,.5)}
+		.btn.orange:active, .btn.orange:focus, .context.orange.active {border-color:#eb7532 ; box-shadow: 0 0 0 .2rem rgba(235, 117, 50,.5) }
+		.kreis.orange, .dot.orange, .sector.orange, .filled.orange, .context.orange:before { background-color: #eb7532 }
+		.collapse_arrow_left.orange, .collapse_arrow_right.orange { background-color: #f0a893 }
+		.yellow {border-color:#f7d038; color:#f7d038; stroke:#f7d038}
+		.btn.yellow:hover:not(:focus) {border-color:#f7d038; box-shadow: 0 0 10px .2rem rgba(247, 208, 56,.5)}
+		.btn.yellow:active, .btn.yellow:focus, .context.yellow.active {border-color:#f7d038 ; box-shadow: 0 0 0 .2rem rgba(247, 208, 56,.5) }
+		.kreis.yellow, .dot.yellow, .sector.yellow, .filled.yellow, .context.yellow:before { background-color: #f7d038 }
+		.collapse_arrow_left.yellow, .collapse_arrow_right.yellow { background-color: #f9dd94 }
+		.green {border-color:#a3e048; color:#a3e048; stroke:#a3e048}
+		.btn.green:hover:not(:focus) {border-color:#a3e048; box-shadow: 0 0 10px .2rem rgba(163, 224, 72,.5)}
+		.btn.green:active, .btn.green:focus, .context.green.active {border-color:#a3e048 ; box-shadow: 0 0 0 .2rem rgba(163, 224, 72,.5) }
+		.kreis.green, .dot.green, .sector.green, .filled.green, .context.green:before { background-color: #a3e048 }
+		.collapse_arrow_left.green, .collapse_arrow_right.green { background-color: #c0e897 }
+		.aquamarine {border-color:#49da9a; color:#49da9a; stroke:#49da9a}
+		.btn.aquamarine:hover:not(:focus) {border-color:#49da9a; box-shadow: 0 0 10px .2rem rgba(73, 218, 154,.5)}
+		.btn.aquamarine:active, .btn.aquamarine:focus, .context.aquamarine.active {border-color:#49da9a ; box-shadow: 0 0 0 .2rem rgba(73, 218, 154,.5) }
+		.kreis.aquamarine, .dot.aquamarine, .sector.aquamarine, .filled.aquamarine, .context.aquamarine:before { background-color: #49da9a }
+		.collapse_arrow_left.aquamarine, .collapse_arrow_right.aquamarine { background-color: #98e4bb }
+		.cyan {border-color:#34bbe6; color:#34bbe6; stroke:#34bbe6}
+		.btn.cyan:hover:not(:focus) {border-color:#34bbe6; box-shadow: 0 0 10px .2rem rgba(52, 187, 230,.5)}
+		.btn.cyan:active, .btn.cyan:focus, .context.cyan.active {border-color:#34bbe6 ; box-shadow: 0 0 0 .2rem rgba(52, 187, 230,.5) }
+		.kreis.cyan, .dot.cyan, .sector.cyan, .filled.cyan, .context.cyan:before { background-color: #34bbe6 }
+		.collapse_arrow_left.cyan, .collapse_arrow_right.cyan { background-color: #93cfed }
+		.purple {border-color:#d23be7; color:#d23be7; stroke:#d23be7}
+		.btn.purple:hover:not(:focus) {border-color:#d23be7; box-shadow: 0 0 10px .2rem rgba(210, 59, 231,.5)}
+		.btn.purple:active, .btn.purple:focus, .context.purple.active {border-color:#d23be7 ; box-shadow: 0 0 0 .2rem rgba(210, 59, 231,.5) }
+		.kreis.purple, .dot.purple, .sector.purple, .filled.purple, .context.purple:before { background-color: #d23be7 }
+		.collapse_arrow_left.purple, .collapse_arrow_right.purple { background-color: #de94ed }
+		.sector { height: 25px; width: 50px; position: relative; content: ''; border-radius: 100px 100px 0 0; transform-origin: 50% 100%; transform: rotate(135.0deg); pointer-events: auto; transition: transform .5s cubic-bezier(0.54,1.5,0.38,1.2); will-change:transform;}
+		.sector_hover { transform-origin: 50% 100%; transform: scale(1.2) rotate(135.0deg); }
+		#sector0{ transform-origin: 25% 100%; transform: rotate(0.0deg); }
+		#sector1{ transform-origin: 25% 100%; transform: rotate(45.0deg); }
+		#sector2{ transform-origin: 25% 100%; transform: rotate(90.0deg); }
+		#sector3{ transform-origin: 25% 100%; transform: rotate(135.0deg); }
+		#sector4{ transform-origin: 25% 100%; transform: rotate(180.0deg); }
+		#sector5{ transform-origin: 25% 100%; transform: rotate(225.0deg); }
+		#sector6{ transform-origin: 25% 100%; transform: rotate(270.0deg); }
+		#sector7{ transform-origin: 25% 100%; transform: rotate(315.0deg); }
+		
+		.clear-border { 
+			box-shadow: none !important;
+		}
+		
+		.center {
+			margin: 0;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+		}
+		
+		.circle {
+			border-radius: 50%;
+			width: 30px;
+			height: 30px;
+		}
+		
+		.context-menu{
+			position: absolute;
+			top: -60px;
+			display: none;
+			transform-origin: 0% 0%;
+		}
+		
+		.context {
+			position: absolute;
+			z-index: 6;
+			margin: 0;
+			padding: 0;
+			transition:transform 0.4s cubic-bezier(0.54,1.5,0.38,1.2);
+			will-change:transform;
+			background-size: 0 0;
+			//border-width: thin;
+		}
+		.context:before {
+			position: absolute;
+			font-family: 'Zapf Dingbats';
+			font-size: 20px;
+			top: 0px;
+			left: +4.5px;
+		}
+		
+		.context-delete {
+			position: absolute;
+			top: 20px;
+			left: -30px;
+		}
+		
+		.context-new {
+			position: absolute;
+		}
+		
+		.context-edit {
+			z-index: 8;
+			position: absolute;
+			top: 20px;
+			left: 30px;
+		}
+		
+		.context-delete::before {
+			//content: "\2796\fe0e";
+			content: "";
+			-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="32.0px" height="32.0px"> <rect ry="1.88976" y="13" x="3" height="4" width="17"/> </svg>');
+			mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="32.0px" height="32.0px"> <rect ry="1.88976" y="13" x="3" height="4" width="17"/> </svg>');
+			-webkit-mask-size: cover;
+			mask-size: cover;
+			top: -0.5px;
+			left: 3px;
+			height: 32px;
+			width: 32px;
+		}		
+		
+		.context-new::before {
+			content: "";
+			-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="32.0px" height="32.0px"> <g transform="scale(0.7)"> <rect width="26" height="6" x="3" y="13" ry="1.88976" /> <rect transform="rotate(90)" ry="1.88976" y="-19" x="3" height="6" width="26"/></g></svg>');
+			mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="32.0px" height="32.0px"> <g transform="scale(0.7)"> <rect width="26" height="6" x="3" y="13" ry="1.88976" /> <rect transform="rotate(90)" ry="1.88976" y="-19" x="3" height="6" width="26"/></g></svg>');
+			-webkit-mask-size: cover;
+			mask-size: cover;
+			top: 3px;
+			left: 3px;
+			height: 32px;
+			width: 32px;
+		}
+		
+		.fade-out.context-new::before {
+			opacity: 0;
+			-webkit-transition: opacity 0.25s ease-in-out;
+			transition: opacity 0.25s ease-in-out;
+		}
+		.context-edit::before {
+			content: "";
+			-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="29.0px" height="29.0px"> <g> <rect style="" width="16.952465" height="0.47071987" x="-6.0798178" y="-18.747414" ry="0.21147084" transform="rotate(130)" /> <rect transform="rotate(130)" ry="0.5" y="-21.493547" x="-6.3513875" height="1.0531292" width="16.876646" style="" /> <rect style="" width="16.884342" height="0.65202093" x="-6.3967662" y="-23.236635" ry="0.30462995" transform="rotate(130)" /> <rect style="" width="0.52697617" height="4" x="7.093832" y="19.785875" ry="0.5" /> <rect ry="0.51872683" y="-4.9274206" x="24.428413" height="4.1498146" width="0.54671335" style="" transform="rotate(75)" /> <rect width="5.129323" height="1.8985559" x="18.353819" y="-7.1726704" ry="0.5" transform="rotate(38)" /> <rect transform="rotate(38)" ry="0.1697222" y="-8.6137009" x="18.42882" height="0.44317397" width="4.9626503" /> <rect width="1.8148509" height="0.63992757" x="-8.6137009" y="-23.39147" ry="0" transform="rotate(128)" /> </g> </svg>');
+			mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="29.0px" height="29.0px"> <g> <rect style="" width="16.952465" height="0.47071987" x="-6.0798178" y="-18.747414" ry="0.21147084" transform="rotate(130)" /> <rect transform="rotate(130)" ry="0.5" y="-21.493547" x="-6.3513875" height="1.0531292" width="16.876646" style="" /> <rect style="" width="16.884342" height="0.65202093" x="-6.3967662" y="-23.236635" ry="0.30462995" transform="rotate(130)" /> <rect style="" width="0.52697617" height="4" x="7.093832" y="19.785875" ry="0.5" /> <rect ry="0.51872683" y="-4.9274206" x="24.428413" height="4.1498146" width="0.54671335" style="" transform="rotate(75)" /> <rect width="5.129323" height="1.8985559" x="18.353819" y="-7.1726704" ry="0.5" transform="rotate(38)" /> <rect transform="rotate(38)" ry="0.1697222" y="-8.6137009" x="18.42882" height="0.44317397" width="4.9626503" /> <rect width="1.8148509" height="0.63992757" x="-8.6137009" y="-23.39147" ry="0" transform="rotate(128)" /> </g> </svg>');
+			//content: url('Zeichnung.svg');
+			-webkit-mask-size: cover;
+			mask-size: cover;
+			top: -1px;
+			left: 0px;
+			height: 29px;
+			width: 29px;
+		}
+		
+		.animate-out {
+			transform:scale(0) rotate(-90deg);
+		}
+		
+		.animate-pop {
+			transform:scale(1.2);
+		}
+		
+		.context-svg {
+			position: absolute;
+			z-index: -1;			
+			top: 0px; 
+			left: 0px;
+			display: none;
+		}
+		
+		div.kreis {
+			transition:transform 0.4s cubic-bezier(0.54,1.5,0.38,1.2);
+			position: absolute;
+			z-index: 5;
+			width: 30px;
+			height: 30px;
+			border-radius: 15px;
+			opacity: 0.5;
+		}
+		
+		.animate-to-node {
+			animation: animate-to-node 0.5s ease;
+			animation-fill-mode: forwards;
+		}
+		
+		@keyframes animate-to-node {
+			0% {border-radius: 15px;}
+			100% {	border-radius: .25rem; }
+		}
+		
+		.fade-out {
+		}
+		
+		.context-svg {
+			box-shadow: none!important;
+		}
+		
+		.unselectable {
+			//-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+		
+		.skrrt {
+			display: none;
+			position: absolute;
+			z-index: 10;
+			width: 30px;
+			height: 30px;
+			border-radius: 15px;
+			border-width: 0px;
+			border-style: solid;
+			background: rgba(247,132,109,0);
+			pointer-events: none;
+			transition: border-width 0s linear .5s, background .0s linear .5s, width .5s ease-out, height .5s ease-out, transform .5s ease-out;
+		}
+		.skrrt-expanded {
+			background: rgba(255,255,255,1);
+			border-width: 1px;
+			width: 89px;
+			height: 49px;
+			transform: translate(0px, -20px);
+			pointer-events: auto;
+
+			//transition: border-width 0s linear .2s, background .2s linear .2s, width .5s ease-out .2s, height .5s ease-out .2s, transform .5s ease-out .2s;
+			transition: border-width 0s linear, background .2s linear, width .5s ease-out, height .5s ease-out, transform .5s ease-out;
+		}
+		.scale-out {
+			transition: height .5s ease-in, width .5s ease-in, transform .5s ease-in;
+			height: 0px;
+			width: 0px;
+			transform: translate(44px, 0px);
+		}
+		
+		.delete-confirm {
+			display: none;
+			font-family: "Arial";
+			font-size: 14px;
+			position: relative;
+			z-index: 11;
+			left: -7px;
+			top: 4px;
+
+			/*clip-path: polygon(-18% 184%, -18% 184%, -18% 184%, -18% 184%); */
+			/*top right top left bottom left bottom right*/
+			-webkit-clip-path: polygon(-18% 150%, -18% 150%, -18% 250%, -18% 250%);
+			clip-path: polygon(-18% 150%, -18% 150%, -18% 250%, -18% 250%);
+			-webkit-transition: -webkit-clip-path .5s ease-out 0s;
+			-webkit-transition: clip-path .5s ease-out 0s;
+			transition: clip-path .5s ease-out 0s;
+		}
+		.delete-confirm:hover {
+			background: white;
+		}
+		.delete-confirm-expanded {
+							
+			-webkit-clip-path: polygon(-51.82% -17.86%, 139.39% -17.86%, 137.31% 284.53%, -49.74% 278.57%);
+			clip-path: polygon(-51.82% -17.86%, 139.39% -17.86%, 137.31% 284.53%, -49.74% 278.57%);
+			//transition: clip-path .5s ease-out .2s;
+			-webkit-transition: -webkit-clip-path .5s ease-out;
+			-webkit-transition: clip-path .5s ease-out;
+			transition: clip-path .5s ease-out;
+		}
+		.scale-confirm-out {
+			-webkit-clip-path: polygon(41% 148%, 41% 148%, 41% 148%, 41% 148%);
+			clip-path: polygon(41% 148%, 41% 148%, 41% 148%, 41% 148%);
+			-webkit-transition: -webkit-clip-path .5s ease-in;
+			-webkit-transition: clip-path .5s ease-in;
+			transition: clip-path .5s ease-in;
+		}
+		
+		.delete-yes {
+			background: #f55b3c;
+			font-size: 10px;
+			color: white;
+			position: absolute;
+			left: -12px;
+			top: 20px;
+		}
+		.delete-yes:hover {
+			background: #f3330c;
+		}
+		.delete-no {
+			background: #3cd6f5;
+			font-size: 10px;
+			color: white;
+			position: absolute;
+			left: 28px;
+			top: 20px;
+		}
+		.delete-no:hover {
+			background: #0cccf3;
+		}
+		
+		.dot {
+			z-index: 5;
+			position: absolute;
+			border-radius: .5rem;
+			width: 8px;
+			height: 8px;
+			/*border: solid;*/
+			border-width: 1px;
+			border-color: black;
+			opacity: 0;
+			pointer-events: none;
+		}
+		
+		.connector {
+			position: absolute;
+		}
+		
+		.box {
+			height: 25px;
+			width: 100px;
+			overflow: hidden;
+			position: absolute;
+			pointer-events: none;
+			box-sizing: border-box;
+		}
+		
+		.animate-wheel {
+			transition: transform .2s ease-in !important;
+			transform: scale(0);
+		}
+		
+		#color_wheel {
+			position: absolute;
+			z-index: 7;
+			transform-origin: 25px 25px;
+			transition: transform .8s cubic-bezier(0.54,1.5,0.38,1.2);
+			will-change:transform;
+		}
+		
+		.collapse_arrow {
+			position: absolute;
+			top: 30px;
+			width: 30px;
+			height: 30px;
+			border-radius: 1rem;
+			background-color: none;
+			transition: opacity .3s linear, top .3s linear;
+		}
+		
+		.collapse_arrow_out {
+			top: 40px;
+			opacity: 0;
+		}
+		
+		.collapse_arrow:hover .collapse_arrow_left, .collapse_arrow:hover .collapse_arrow_right {
+			box-shadow: 0 0 15px 4px rgba(204, 204, 204,.3);
+		}
+		
+		.collapse_arrow_left {
+			position: absolute;
+			top: 10px;
+			left: 3px;
+			border-radius: 0 0.5rem 0.5rem 0;
+			transform: rotate(-35deg);
+			width: 15px;
+			height: 5px;
+			opacity: 1;
+			transition: transform .4s linear;
+			z-index: 6;
+		}
+		.collapse_arrow_right {
+			position: absolute;
+			top: 10px;
+			left: 12px;
+			border-radius: 0.5rem 0 0 0.5rem;
+			transform: rotate(35deg);
+			width: 15px;
+			height: 5px;
+			opacity: 1;
+			transition: transform .4s linear;
+			z-index: 6;
+		}
+		
+		.animate_collapse_arrow_left {
+			transform: rotate(45deg);
+		}
+		.animate_collapse_arrow_right {
+			transform: rotate(-45deg);
+		}
+		
+		.disk_arrow:hover g {
+			filter:url("#drop_shadow");
+			//filter: drop-shadow( 0px 0px 2px rgba(204,204,204,.2) );
+		}
+				
+	</style>
+  <title>MindMap!</title>
+ </head>
+ <body>
+	<div id="down-_upload">
+ 		<svg class="disk_arrow" style="position: fixed; z-index: 1; right: 8px; top: 6px" height="32.0px" width="32.0px" onclick="save(event)"> <defs> <filter id="drop_shadow"> <feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="rgba(204,204,204,.3)"/> </filter> </defs> <g> <g> <g onmouseout="" onmouseover=""> <g transform="matrix(1.5268437,0,0,1.4044269,-8.343151,-5.9289577)" onmouseover="" onmouseout=""> <path d="m 15.809524,5.643158 h 0.380952 C 16.638952,5.643158 17,5.9693081 17,6.3744362 V 20.268722 C 17,20.67385 16.638952,21 16.190476,21 H 15.809524 C 15.361048,21 15,20.67385 15,20.268722 V 6.3744362 C 15,5.9693081 15.361048,5.643158 15.809524,5.643158 Z" style="fill:#cccccc;fill-rule:evenodd;stroke-width:0.855148"/> <path d="m 25.353613,-3.1280591 c 0.554,0 1,0.446 1,1 v 7 c 0,0.554 -0.446,1 -1,1 -0.554,0 -1,-0.446 -1,-1 v -7 c 0,-0.554 0.446,-1 1,-1 z" transform="rotate(40.5)" style="fill:#cccccc;fill-rule:evenodd;stroke-width:0.654654" /> <path d="m 1.0096471,17.663647 c 0.554,0 1,0.446 1,1 v 7 c 0,0.554 -0.446,1 -1,1 -0.55399999,0 -0.99999999,-0.446 -0.99999999,-1 v -7 c 0,-0.554 0.446,-1 0.99999999,-1 z" transform="matrix(-0.76040597,0.64944805,0.64944805,0.76040597,0,0)" style="fill:#cccccc;fill-rule:evenodd;stroke-width:0.654654" /> </g> <rect style="fill:#cccccc;stroke-width:1.18591" width="26.515907" height="3.5577376" x="2.8155499" y="26.514071" ry="0.59295619" onmouseover="" onmouseout="" /> </g> </g> </g> </svg> 
+		<svg class="disk_arrow" style="position: fixed; z-index: 1; right: 48px; top: 6px" height="32.0px" width="32.0px" onclick="load(event)"> <g> <g> <g onmouseout="" onmouseover=""> <g transform="matrix(-1.5268437,0,0,-1.4044269,40.53788,31.730152)" onmouseover="" onmouseout=""> <path d="m 15.809524,5.643158 h 0.380952 C 16.638952,5.643158 17,5.9693081 17,6.3744362 V 20.268722 C 17,20.67385 16.638952,21 16.190476,21 H 15.809524 C 15.361048,21 15,20.67385 15,20.268722 V 6.3744362 C 15,5.9693081 15.361048,5.643158 15.809524,5.643158 Z" style="fill:#cccccc;fill-rule:evenodd;stroke-width:0.855148"/> <path d="m 25.353613,-3.1280591 c 0.554,0 1,0.446 1,1 v 7 c 0,0.554 -0.446,1 -1,1 -0.554,0 -1,-0.446 -1,-1 v -7 c 0,-0.554 0.446,-1 1,-1 z" transform="rotate(40.5)" style="fill:#cccccc;fill-rule:evenodd;stroke-width:0.654654" /> <path d="m 1.0096471,17.663647 c 0.554,0 1,0.446 1,1 v 7 c 0,0.554 -0.446,1 -1,1 -0.55399999,0 -0.99999999,-0.446 -0.99999999,-1 v -7 c 0,-0.554 0.446,-1 0.99999999,-1 z" transform="matrix(-0.76040597,0.64944805,0.64944805,0.76040597,0,0)" style="fill:#cccccc;fill-rule:evenodd;stroke-width:0.654654" /> </g> <rect style="fill:#cccccc;stroke-width:1.18591" width="26.515907" height="3.5577376" x="2.8155499" y="26.514071" ry="0.59295619" onmouseover="" onmouseout="" /> </g> </g> </g> </svg> 
+	</div>
+	<div id="overlay" style="top: 0; left: 0; right: 0; bottom: 0; position: fixed; z-index: 100; display: none" onmousedown="event.preventDefault();"></div>
+	<div id="not_supported_overlay" style="top: 0; left: 0; right: 0; bottom: 0; position: fixed; z-index: 100; background-color: white"><p style="text-align:center">Sorry, but your platform is not supported by this application...</p><br></div>
+	<div id="mindmap">
+		<div id="color_wheel" class="animate-wheel">
+			<div id="sector0" class = "box"><div class="red sector "></div></div>
+			<div id="sector1" class = "box"><div class="blue sector "></div></div>
+			<div id="sector2" class = "box"><div class="orange sector "></div></div>
+			<div id="sector3" class = "box"><div class="yellow sector "></div></div>
+			<div id="sector4" class = "box"><div class="green sector "></div></div>
+			<div id="sector5" class = "box"><div class="aquamarine sector "></div></div>
+			<div id="sector6" class = "box"><div class="cyan sector "></div></div>
+			<div id="sector7" class = "box"><div class="purple sector "></div></div>
+		</div>
+		<div><div id="reference" style="display: none" class="btn unselectable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></div>
+
+		<div id="layout" class="center">
+			<div id="root" class="node" style="position:absolute">
+				<div tabindex="-1" class="yellow btn unselectable btn-node">Hello,</div>
+				<div class="context-menu" >
+					<div class="context-svg"><svg><path d=""/></svg></div>
+					<button class="btn context circle context-delete"></button>
+					<button class="btn context circle context-edit"></button>
+					<button id="ttt" class="btn context circle context-new"></button>
+					<div class="collapse_arrow collapse_arrow_out">
+						<div class="collapse_arrow_left "></div>
+						<div class="collapse_arrow_right "></div>
+					</div>
+					<div class="kreis"></div>
+					<div class="skrrt" onmousedown="event.preventDefault()" style="position: absolute; left: -30px; top: 20px" ></div>
+					<div class="delete-confirm unselectable">
+						Delete?
+						<button onmousedown="yd(event, this)" onclick="delete_confirm_yes(event, this)" class="btn delete-yes">yes</button>
+						<button onmousedown="nd(event, this)" onclick="delete_confirm_no(event, this)" class="btn delete-no">no</button>
+					</div>
+				</div>
+				
+				<div class="node" style="position: absolute; top: 100px; left: 50px">
+					<div class="connector"><svg><path d=""/></svg><div class="dot"></div></div>
+					<div tabindex="-1" class="red btn unselectable btn-node">I</div>
+					<div class="context-menu" >
+						<div class="context-svg"><svg><path d=""/></svg></div>
+						<button class="btn context circle context-delete"></button>
+						<button class="btn context circle context-edit"></button>
+						<button class="btn context circle context-new"></button>
+						<div class="collapse_arrow collapse_arrow_out">
+							<div class="collapse_arrow_left "></div>
+							<div class="collapse_arrow_right "></div>
+						</div>
+						<div class="kreis"></div>
+						<div class="skrrt" onmousedown="event.preventDefault()" style="position: absolute; left: -30px; top: 20px" ></div>
+						<div class="delete-confirm unselectable">
+							Delete?
+						<button onmousedown="yd(event, this)" onclick="delete_confirm_yes(event, this)" class="btn delete-yes">yes</button>
+						<button onmousedown="nd(event, this)" onclick="delete_confirm_no(event, this)" class="btn delete-no">no</button>
+						</div>
+					</div>
+				</div>
+				
+				<div class="node" style="position:absolute; top: -100px; left: -300px">
+				
+					<div class="connector"><svg><path d=""/></svg><div class="dot"></div></div>
+					<div tabindex="-1" class="cyan btn unselectable btn-node">am</div>
+					<div class="context-menu" >
+						<div class="context-svg"><svg><path d=""/></svg></div>
+						<button class="btn context circle context-delete"></button>
+						<button class="btn context circle context-edit"></button>
+						<button class="btn context circle context-new"></button>
+						<div class="collapse_arrow collapse_arrow_out">
+						<div class="collapse_arrow_left "></div>
+							<div class="collapse_arrow_right "></div>
+						</div>
+						<div class="kreis"></div>
+						<div class="skrrt" onmousedown="event.preventDefault()" style="position: absolute; left: -30px; top: 20px" ></div>
+						<div class="delete-confirm unselectable">
+							Delete?
+						<button onmousedown="yd(event, this)" onclick="delete_confirm_yes(event, this)" class="btn delete-yes">yes</button>
+						<button onmousedown="nd(event, this)" onclick="delete_confirm_no(event, this)" class="btn delete-no">no</button>
+						</div>
+					</div>
+					
+					<div class="node" style="position:absolute; top: 50px; left: -50px">
+						<div class="connector"><svg><path d=""/></svg><div class="dot"></div></div>
+						<div tabindex="-1" class="purple btn unselectable btn-node">a</div>
+						<div class="context-menu" >
+							<div class="context-svg"><svg><path d=""/></svg></div>
+							<button class="btn context circle context-delete"></button>
+							<button class="btn context circle context-edit"></button>
+							<button class="btn context circle context-new"></button>
+							<div class="collapse_arrow collapse_arrow_out">
+								<div class="collapse_arrow_left "></div>
+								<div class="collapse_arrow_right "></div>
+							</div>
+							<div class="kreis"></div>
+							<div class="skrrt" onmousedown="event.preventDefault()" style="position: absolute; left: -30px; top: 20px" ></div>
+							<div class="delete-confirm unselectable">
+								Delete?
+						<button onmousedown="yd(event, this)" onclick="delete_confirm_yes(event, this)" class="btn delete-yes">yes</button>
+						<button onmousedown="nd(event, this)" onclick="delete_confirm_no(event, this)" class="btn delete-no">no</button>
+							</div>
+						</div>
+					</div>
+					<div class="node" style="position:absolute; top: 100px; left: -50px">
+						<div class="connector"><svg><path d=""/></svg><div id="tee" class="dot"></div></div>
+						<div tabindex="-1" class="orange btn unselectable btn-node">mindmap!</div>
+						<div class="context-menu" >
+							<div class="context-svg"><svg><path d=""/></svg></div>
+							<button class="btn context circle context-delete"></button>
+							<button class="btn context circle context-edit"></button>
+							<button class="btn context circle context-new"></button>
+							<div class="collapse_arrow collapse_arrow_out">
+								<div class="collapse_arrow_left "></div>
+								<div class="collapse_arrow_right "></div>
+							</div>
+							<div class="kreis"></div>
+							<div class="skrrt" onmousedown="event.preventDefault()" style="position: absolute; left: -30px; top: 20px" ></div>
+							<div class="delete-confirm unselectable">
+								Delete?
+						<button onmousedown="yd(event, this)" onclick="delete_confirm_yes(event, this)" class="btn delete-yes">yes</button>
+						<button onmousedown="nd(event, this)" onclick="delete_confirm_no(event, this)" class="btn delete-no">no</button>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+			</div>
+		</div>
+		
+	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+	<script
+		src="mindmap.js">
+	</script>
+ </body>
+</html>
